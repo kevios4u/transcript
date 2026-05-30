@@ -1,0 +1,228 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+               'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+}
+
+body{
+  background: linear-gradient(180deg, #d3d3d3, #808080);
+  min-height: 100vh;
+}
+
+/* Main Layout */
+main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Container */
+.container{
+  background-color: #f2f2f2;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.7);
+  border-top: 3px solid darkgreen;
+  border-bottom: 3px solid darkgreen;
+  width: 100%;
+  max-width: 760px;
+}
+
+/* Logo */
+.logo{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo img{
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+/* Flex Section */
+.apply-dash{
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Cards */
+.apply,
+.staff-login{
+  flex: 1 1 320px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: 0.3s ease;
+  border: 1px solid #ccc;
+}
+
+.apply:hover,
+.staff-login:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  border-color: darkgreen;
+}
+
+/* Headings */
+h4{
+  text-align: center;
+  color: #fff;
+  background-color: darkgreen;
+  padding: 12px;
+  font-size: 1.1rem;
+}
+
+/* Apply Section */
+.apply{
+  padding-bottom: 15px;
+}
+
+.apply p{
+  padding: 12px 15px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.apply a{
+  text-decoration: none;
+  color: red;
+  font-weight: bold;
+}
+
+.apply a:hover{
+  text-decoration: underline;
+}
+
+/* Form */
+.staff-login form{
+  padding: 20px;
+}
+
+label{
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+input{
+  width: 100%;
+  height: 50px;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  outline: none;
+}
+
+input:focus{
+  border-color: darkgreen;
+  box-shadow: 0 0 5px rgba(0,100,0,0.4);
+}
+
+/* Buttons */
+button{
+  width: 48%;
+  height: 50px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.submit{
+  background-color: darkgreen;
+}
+
+.submit:hover{
+  background-color: green;
+}
+
+.reset{
+  background-color: red;
+}
+
+.reset:hover{
+  background-color: darkred;
+}
+
+/* Button Wrapper */
+.staff-login form{
+  display: flex;
+  flex-direction: column;
+}
+
+.staff-login .buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+}
+
+.staff-login p{
+  margin-left: 20px;
+}
+
+.staff-login p a{
+  text-decoration: none;
+  color: red;
+}
+
+.staff-login p a:hover{
+  text-decoration: underline;
+}
+
+.staff-login p a:visited{
+  color: darkred;
+}
+
+.staff-login p a:active{
+  color: darkgreen;
+}
+
+.staff-login p a:focus{
+  outline: 2px solid darkgreen;
+  outline-offset: 2px;
+} 
+
+/* Responsive */
+@media (max-width: 768px){
+
+  .container{
+    padding: 15px;
+  }
+
+  .apply-dash{
+    flex-direction: column;
+  }
+
+  button{
+    width: 48%;
+  }
+
+  .staff-login .buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-direction: row;
+      
+  }
+  
+}
