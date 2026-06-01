@@ -1,0 +1,56 @@
+/* css for student dashboard */
+:root{
+    --main-bg-green-color: rgb(14, 68, 14);
+    --main-bg-gray-color: #f4f4f4;
+    --bg-color: darkgreen;
+    --white-text-color: #fff;
+    --green-text-color: rgb(14, 68, 14);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    scrollbar-width: medium;
+    scrollbar-color: rgb(14, 68, 14) #f4f4f4;  
+    scrollbar-gutter: stable;
+    scroll-behavior: smooth;
+}
+.dashboard-header {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-bg-green-color);
+    color: var(--white-text-color);
+    padding: 20px;
+    width: 100%;
+    max-width: 100vw;
+    height: auto;
+}
+.dashboard-header h1 {
+    margin-bottom: 10px;
+}
+.dashboard-header ion-icon {
+    font-size: 46px;
+    border: 1px solid var(--white-text-color);
+    border-radius: 50%;
+}
+.dashboard-nav {
+    width: 200px;
+    background-color: var(--main-bg-gray-color);
+    color: var(--green-text-color);
+    padding: 20px;
+    height: 100%;
+}
+.dashboard-nav a {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}

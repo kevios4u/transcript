@@ -11,7 +11,7 @@
 <body>
   <main>
     <div class="container">
-
+  
       <!-- Logo -->
       <div class="logo">
         <img src="./assets/images/nilest-logo.png"
@@ -25,21 +25,21 @@
 
           <form action="student-login-process.php" method="post" enctype="multipart/form-data">
 
-            <label for="user">Username:</label>
+            <label for="user">Reg No.:</label>
             <input
               type="text"
               name="user"
               id="user"
-              placeholder="Username"
+              placeholder="Registration Number"
               required
             />
 
-            <label for="pass">Password:</label>
+            <label for="pass">State of Origin:</label>
             <input
-              type="password"
+              type="text"
               name="pass"
               id="pass"
-              placeholder="Password"
+              placeholder="State of Origin"
               required
             />
 
@@ -55,7 +55,6 @@
 
           </form>
           <div class="info">
-            <p><a href="#">Forgotten Password?</a></p>
             <p><a href="#">Help?</a></p>
           </div>
         </section>
