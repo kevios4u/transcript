@@ -15,16 +15,15 @@
 </head>
 <body>
     <header class="dashboard-header">
-      <h1><ion-icon name="person"></ion-icon> Welcome, <?php echo $student_name; ?>!</h1>
+      <h1><ion-icon name="person"></ion-icon> Welcome,<span><?php echo $student_name; ?>!</span></h1>
       <nav class="dashboard-nav">
-        <ul>
-          <li><a href="#">Recipient Information</a></li>
-          <li><a href="#">Student Profile</a></li>
-          <li><a href="#">Transcript Status</a></li>
-          <li><a href="#">Print Slip</a></li>
-          <li><a href="#">Logout</a></li>
-        </ul>
+        <a href="#">Recipient Information</a>
+        <a href="#">Student Profile</a>
+        <a href="#">Transcript Status</a>
+        <a href="#">Print Slip</a>
+        <a href="#">Logout</a>
       </nav>
+      <div class="dashboard-menu"><ion-icon name="menu"></ion-icon></div>
     </header>
 
     <main class="dashboard-main">
