@@ -1,4 +1,3 @@
-<!-- prepare student dashboard with menu bar list of recipients information, application status, print slip, application history, and logout button, welcome message with student name, footer with contact information and social media links, and a responsive design for mobile devices. -->
  <?php
   include 'auth-student.php';
 
