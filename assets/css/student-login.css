@@ -13,16 +13,18 @@ html{
 
 body{
   background: linear-gradient(180deg, #d3d3d3, #808080);
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
 /* Main Layout */
 main{
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+  padding: 32px 20px;
 }
 
 /* Container */
@@ -151,37 +153,91 @@ button{
   gap: 10px;
   flex-direction: row;
 }
+
 .info{
-  padding-bottom: 10px;
-}
-.staff-login p{
-  margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e0e0e0;
 }
 
-.staff-login p a{
+.info a{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid darkgreen;
+  border-radius: 5px;
+  background-color: #f2fff2;
+  color: darkgreen;
+  font-weight: 600;
   text-decoration: none;
-  color: red;
 }
 
-.staff-login p a:hover{
+.info a:hover{
+  background-color: darkgreen;
+  color: #fff;
   text-decoration: underline;
 }
 
-.staff-login p a:visited{
-  color: darkred;
+.info a:visited{
+  background-color: #034e35;
+  color: rgb(248, 245, 247);
 }
 
-.staff-login p a:active{
+.info a:active{
   color: darkgreen;
 }
 
-.staff-login p a:focus{
+.info a:focus{
   outline: 2px solid darkgreen;
   outline-offset: 2px;
 } 
 
+.login-footer{
+  width: 100%;
+  padding: 16px 20px;
+  color: #fff;
+  background-color: #173117;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.login-footer p{
+  margin-bottom: 4px;
+}
+
+.login-footer p:last-child{
+  margin-bottom: 0;
+}
+
+.login-footer a{
+  display: inline-block;
+  margin: 0 8px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.login-footer a:hover,
+.login-footer a:focus{
+  color: #d9f2d9;
+  outline: none;
+}
+ 
 /* Responsive */
 @media (max-width: 768px){
+
+  main{
+    align-items: flex-start;
+    padding: 20px 14px;
+  }
 
   .container{
     padding: 15px;
@@ -203,5 +259,28 @@ button{
     flex-direction: row;
       
   }
-  
+  .info{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 12px 0 0;
+  }
+
+  .info a{
+    flex: 1 1 120px;
+    padding: 9px 8px;
+    font-size: 0.95rem;
+  }
+
+  .login-footer{
+    padding: 14px 12px;
+    font-size: 0.9rem;
+  }
+
+  .login-footer a{
+    margin: 0 6px;
+  }
 }

@@ -1,0 +1,119 @@
+.recipient-form {
+    padding: 20px;
+    background-color: var(--white-text-color);
+    border: 1px solid #e2e8e2;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(14, 68, 14, 0.08);
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.form-wide {
+    margin-top: 16px;
+}
+.form-group label {
+    color: #324232;
+    font-weight: 700;
+    font-size: 14px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    color: #243524;
+    background-color: #fff;
+    border: 1px solid #cfd8cf;
+    border-radius: 6px;
+    font: inherit;
+}
+.form-group textarea {
+    resize: vertical;
+    line-height: 1.5;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--green-text-color);
+    box-shadow: 0 0 0 3px rgba(14, 68, 14, 0.14);
+    outline: none;
+}
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+.form-actions button {
+    min-height: 44px;
+    padding: 10px 16px;
+    color: var(--white-text-color);
+    border: 0;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.form-submit {
+    background-color: var(--green-text-color);
+}
+.form-reset {
+    background-color: #b91c1c;
+}
+.form-actions button:hover,
+.form-actions button:focus {
+    filter: brightness(1.08);
+    outline: none;
+}
+.overview-heading {
+    margin-bottom: 18px;
+}
+.overview-heading h2 {
+    color: var(--green-text-color);
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+.overview-heading p {
+    color: #555;
+    line-height: 1.5;
+}
+.recipient-overview {
+    width: min(960px, 100%);
+    margin: 0 auto;
+}
+.recipient-main {
+    flex: 1;
+    width: 100%;
+    padding: 28px 20px;
+}
+@media (max-width: 600px) {
+    .recipient-form {
+        padding: 16px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .form-wide {
+        margin-top: 14px;
+    }
+    .form-actions {
+        flex-direction: row;
+    }
+    .form-actions button {
+        width: 48%;
+    }
+    .recipient-main {
+        padding: 24px 16px;
+    }
+    .overview-heading h2 {
+        font-size: 22px;
+    }
+  }

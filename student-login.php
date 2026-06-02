@@ -53,14 +53,23 @@
               </button>
             </div>
 
+            <div class="info">
+              <a href="#">Help?</a>
+              <a href="index.php">Back to Home</a>
+            </div>
+
           </form>
-          <div class="info">
-            <p><a href="#">Help?</a></p>
-          </div>
         </section>
 
       </div>
     </div>
   </main>
+  <footer class="login-footer">
+    <p>Contact us: 07012345678 | info@yahoo.com</p>
+    <p>
+      <a href="index.php">Home</a>
+      <a href="#">Help</a>
+    </p>
+  </footer>
 </body>
 </html>

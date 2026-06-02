@@ -4,19 +4,22 @@
 
   // Get the student's name from the session
   $student_name = htmlspecialchars($_SESSION['student_name'], ENT_QUOTES, 'UTF-8');
+  $reg_no = htmlspecialchars($_SESSION['reg_no'], ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
 <html lang="en"> 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Dashboard</title>
+  <title>Student Dashboard: Recipient Information</title>
   <link rel="stylesheet" href="./assets/css/student-dashboard.css" />
+  <link rel="stylesheet" href="./assets/css/recipient-info.css" />
 </head>
 <body>
     <header class="dashboard-header">
       <h1><ion-icon name="person"></ion-icon> Welcome,<span><?php echo $student_name; ?>!</span></h1>
       <nav class="dashboard-nav" id="dashboardNav">
+        <a href="student-dashboard.php">Dashboard</a>
         <a href="recipient-info.php">Recipient Information</a>
         <a href="student-profile.php">Student Profile</a>
         <a href="transcript-status.php">Transcript Status</a>
@@ -28,46 +31,38 @@
       </div>
     </header>
 
-    <main class="dashboard-main">
-      <section class="dashboard-overview" aria-labelledby="overviewTitle">
+    <main class="recipient-main">
+      <section class="recipient-overview" aria-labelledby="overviewTitle">
         <div class="overview-heading">
-          <h2 id="overviewTitle">Dashboard Overview</h2>
-          <p>Manage your transcript request and track your application progress.</p>
+          <h2 id="overviewTitle">Recipient Information</h2>
+          <p>Fill in the details of the institution, which you want to send your transcript.</p>
         </div>
 
-        <div class="dashboard-cards">
-          <a class="dashboard-card" id="recipient-info" href="recipient-info.php">
-            <ion-icon name="document-text-outline"></ion-icon>
-            <div>
-              <h3>Recipient Information</h3>
-              <p>Add or review the destination details for your transcript.</p>
-            </div>
-          </a>
+        <form class="recipient-form" action="#" method="post">
+          <input type="hidden" name="reg_no" value="<?php echo $reg_no; ?>">
 
-          <a class="dashboard-card" id="student-profile" href="student-profile.php">
-            <ion-icon name="person-outline"></ion-icon>
-            <div>
-              <h3>Student Profile</h3>
-              <p>Check your personal and academic information.</p>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="recipient_name">Recipient Name</label>
+              <input type="text" id="recipient_name" name="recipient_name" placeholder="Recipient name" required>
             </div>
-          </a>
 
-          <a class="dashboard-card" id="transcript-status" href="transcript-status.php">
-            <ion-icon name="time-outline"></ion-icon>
-            <div>
-              <h3>Transcript Status</h3>
-              <p>View the current state of your transcript application.</p>
+            <div class="form-group">
+              <label for="institution_name">Institution Name</label>
+              <input type="text" id="institution_name" name="institution_name" placeholder="Name of institution" required>
             </div>
-          </a>
+          </div>
 
-          <a class="dashboard-card" id="print-slip" href="print-slip.php">
-            <ion-icon name="print-outline"></ion-icon>
-            <div>
-              <h3>Print Slip</h3>
-              <p>Print or download your application slip when it is ready.</p>
-            </div>
-          </a>
-        </div>
+          <div class="form-group form-wide">
+            <label for="institution_address">Institution Address</label>
+            <textarea id="institution_address" name="institution_address" rows="4" placeholder="Full institution address" required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="form-submit">Submit Recipient Info</button>
+            <button type="reset" class="form-reset">Clear Form</button>
+          </div>
+        </form>
       </section>
     </main>
   <footer class="dashboard-footer">
