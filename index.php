@@ -12,10 +12,9 @@
   <main>
     <div class="container">
 
-      <!-- Logo -->
-      <div class="logo">
-        <img src="./assets/images/nilest-logo.png"
-             alt="NILEST Logo">
+      <!-- Logo and Institute Name -->
+      <div class="logo-section">
+        <img src="./assets/images/nilest-logo.png" alt="NILEST Logo" class="logo-img">
       </div>
 
       <div class="apply-dash">
@@ -30,7 +29,7 @@
           <p>→ Click on Submit.</p>
           <p>
             → On the dashboard, you can access the
-            <strong>Status</strong> menu to verify the status of your
+            <strong>Transcript Status</strong> menu to verify the status of your
             application.
           </p>
         </section>

@@ -11,11 +11,10 @@
 <body>
   <main>
     <div class="container">
-  
-      <!-- Logo -->
-      <div class="logo">
-        <img src="./assets/images/nilest-logo.png"
-             alt="NILEST Logo">
+
+      <!-- Logo and Institute Name -->
+      <div class="logo-section">
+        <img src="./assets/images/nilest-logo.png" alt="NILEST Logo" class="logo-img">
       </div>
 
       <div class="apply-dash">
@@ -64,12 +63,5 @@
       </div>
     </div>
   </main>
-  <footer class="login-footer">
-    <p>Contact us: 07012345678 | info@yahoo.com</p>
-    <p>
-      <a href="index.php">Home</a>
-      <a href="#">Help</a>
-    </p>
-  </footer>
 </body>
 </html>

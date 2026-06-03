@@ -14,7 +14,10 @@
 </head>
 <body>
     <header class="dashboard-header">
-      <h1><ion-icon name="person"></ion-icon> Welcome,<span><?php echo $student_name; ?>!</span></h1>
+      <div class="header-logo-container">
+        <img src="./assets/images/nilest-logo.png" alt="NILEST Logo" class="header-logo">
+        <span class="header-school-name">Nigerian Institute of Leather and Science Technology, Zaria</span>
+      </div>
       <nav class="dashboard-nav" id="dashboardNav">
         <a href="recipient-info.php">Recipient Information</a>
         <a href="student-profile.php">Student Profile</a>
@@ -28,6 +31,9 @@
     </header>
 
     <main class="dashboard-main">
+      <div class="dashboard-welcome">
+        <h1>Welcome, <span><?php echo $student_name; ?></span>!</h1>
+      </div>
       <section class="dashboard-overview" aria-labelledby="overviewTitle">
         <div class="overview-heading">
           <h2 id="overviewTitle">Dashboard Overview</h2>

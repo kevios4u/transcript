@@ -16,7 +16,10 @@
 </head>
 <body>
     <header class="dashboard-header">
-      <h1><ion-icon name="person"></ion-icon> Welcome,<span><?php echo $student_name; ?>!</span></h1>
+      <div class="header-logo-container">
+        <img src="./assets/images/nilest-logo.png" alt="NILEST Logo" class="header-logo">
+        <span class="header-school-name">Nigerian Institute of Leather and Science Technology, Zaria</span>
+      </div>
       <nav class="dashboard-nav" id="dashboardNav">
         <a href="student-dashboard.php">Dashboard</a>
         <a href="recipient-info.php">Recipient Information</a>
@@ -31,6 +34,9 @@
     </header>
 
     <main class="recipient-main">
+      <div class="dashboard-welcome">
+        <h1>Welcome, <span><?php echo $student_name; ?></span>!</h1>
+      </div>
       <section class="recipient-overview" aria-labelledby="overviewTitle">
         <div class="overview-heading">
           <h2 id="overviewTitle">Recipient Information</h2>
@@ -74,7 +80,8 @@
   </footer>
 
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script src="./assets/js/student-dashboard.js"></script>
+  <script src="./assets/js/recipient-info.js"></script>
 </body>
 </html>

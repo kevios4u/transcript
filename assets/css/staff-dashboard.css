@@ -1,0 +1,159 @@
+/* css for staff dashboard */
+:root {
+    --main-bg-green-color: rgb(14, 68, 14);
+    --main-bg-gray-color: #f4f4f4;
+    --bg-color: darkgreen;
+    --white-text-color: #fff;
+    --green-text-color: rgb(14, 68, 14);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: var(--main-bg-green-color);
+    color: var(--white-text-color);
+    padding: 20px 20px 0;
+    width: 100%;
+}
+
+.header-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 16px;
+}
+
+.header-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background-color: var(--white-text-color);
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.header-school-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+}
+
+.dashboard-header h1 {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 100%;
+    font-size: 1.5rem;
+}
+
+.dashboard-nav {
+    width: 100%;
+    margin-left: 0;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.dashboard-header h1 ion-icon {
+    font-size: 32px;
+    border: 1px solid var(--white-text-color);
+    border-radius: 50%;
+    padding: 4px;
+}
+
+.dashboard-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.dashboard-nav a {
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+    background-color: var(--main-bg-gray-color);
+    color: var(--green-text-color);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dashboard-nav a:hover {
+    background-color: var(--green-text-color);
+    color: var(--white-text-color);
+}
+
+.dashboard-main {
+    flex: 1;
+    padding: 30px 20px;
+}
+
+.dashboard-footer {
+    padding: 15px;
+    color: var(--white-text-color);
+    background-color: #173117;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.dashboard-footer a {
+    color: var(--white-text-color);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .header-logo-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    .header-logo {
+        width: 50px;
+        height: 50px;
+    }
+    .header-school-name {
+        font-size: 1.15rem;
+    }
+    .dashboard-header h1 {
+        font-size: 1.2rem;
+    }
+    .dashboard-nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+    .dashboard-nav a {
+        display: block;
+        text-align: center;
+    }
+}

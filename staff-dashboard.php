@@ -10,7 +10,11 @@
 <body>
   <div class="dashboard-container">
     <header class="dashboard-header">
-      <h1>ion-icon name="person"></ion-icon> Welcome, [Staff Name]!</h1>
+      <div class="header-logo-container">
+        <img src="./assets/images/nilest-logo.png" alt="NILEST Logo" class="header-logo">
+        <span class="header-school-name">Nigerian Institute of Leather and Science Technology, Zaria</span>
+      </div>
+      <h1><ion-icon name="person"></ion-icon> Welcome, [Staff Name]!</h1>
       <nav class="dashboard-nav">
         <ul>
           <li><a href="#">Update Students</a></li>
