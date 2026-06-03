@@ -1,0 +1,66 @@
+.student-main {
+    flex: 1;
+    width: 100%;
+    padding: 28px 20px;
+}
+.student-overview {
+    width: min(960px, 100%);
+    margin: 0 auto;
+}
+.student-profile-form {
+    padding: 20px;
+    background-color: var(--white-text-color);
+    border: 1px solid #e2e8e2;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(14, 68, 14, 0.08);
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.form-group label {
+    color: #324232;
+    font-weight: 700;
+    font-size: 14px;
+}
+.form-group input {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    color: #465246;
+    background-color: #f7faf7;
+    border: 1px solid #cfd8cf;
+    border-radius: 6px;
+    font: inherit;
+    cursor: default;
+}
+.form-group input:focus {
+    border-color: #a8b8a8;
+    outline: none;
+}
+.profile-empty {
+    padding: 16px;
+    color: #5f6b5f;
+    background-color: var(--white-text-color);
+    border: 1px solid #e2e8e2;
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+    .student-main {
+        padding: 24px 16px;
+    }
+    .student-profile-form {
+        padding: 16px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
