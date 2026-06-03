@@ -51,6 +51,8 @@ main{
   width: 100px;
   height: 100px;
   object-fit: contain;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo-section .school-name {
