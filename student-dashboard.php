@@ -31,13 +31,13 @@
     </header>
 
     <main class="dashboard-main">
-      <div class="dashboard-welcome">
-        <h1>Welcome, <span><?php echo $student_name; ?></span>!</h1>
-      </div>
       <section class="dashboard-overview" aria-labelledby="overviewTitle">
-        <div class="overview-heading">
-          <h2 id="overviewTitle">Dashboard Overview</h2>
-          <p>Manage your transcript request and track your application progress.</p>
+        <div class="dashboard-welcome">
+          <div>
+            <p class="dashboard-kicker">Student Workspace</p>
+            <h1 id="overviewTitle">Welcome, <span><?php echo $student_name; ?></span>!</h1>
+            <p>Manage your transcript request and track your application progress.</p>
+          </div>
         </div>
 
         <div class="dashboard-cards">
