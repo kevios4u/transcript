@@ -299,15 +299,10 @@ function filterStudentTable() {
   let visible = 0;
 
   rows.forEach((row) => {
-    const cells = row.querySelectorAll('td');
-    // Searchable columns: name (1), reg_no (2), department (6)
-    const name  = cells[1] ? cells[1].textContent.toLowerCase() : '';
-    const regNo = cells[2] ? cells[2].textContent.toLowerCase() : '';
-    const dept  = cells[6] ? cells[6].textContent.toLowerCase() : '';
-    // Programme column (4)
-    const prog  = cells[4] ? cells[4].textContent.trim() : '';
+    const searchableText = row.dataset.search || row.textContent.toLowerCase();
+    const prog = row.dataset.programme || '';
 
-    const matchesSearch = !query || name.includes(query) || regNo.includes(query) || dept.includes(query);
+    const matchesSearch = !query || searchableText.includes(query);
     const matchesProg   = !progVal || prog === progVal;
 
     if (matchesSearch && matchesProg) {
@@ -349,3 +344,15 @@ studentSearch && studentSearch.addEventListener('input', () => {
 });
 
 programmeFilter && programmeFilter.addEventListener('change', filterStudentTable);
+
+/* Delete confirmation */
+document.querySelectorAll('.delete-student-form').forEach((form) => {
+  form.addEventListener('submit', (e) => {
+    const studentName = form.dataset.studentName || 'this student';
+    const confirmed = window.confirm(`Are you sure you want to delete the record for ${studentName}? This action cannot be undone.`);
+
+    if (!confirmed) {
+      e.preventDefault();
+    }
+  });
+});

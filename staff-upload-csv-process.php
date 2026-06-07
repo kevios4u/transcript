@@ -80,10 +80,11 @@ $stmt = $conn->prepare(
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 );
 
-$inserted  = 0;
-$skipped   = 0;
-$row_errors = 0;
-$row_num   = 1; // 1 = header row already consumed
+$inserted    = 0;
+$skipped     = 0;
+$row_errors  = 0;
+$row_num     = 1; // 1 = header row already consumed
+$seen_reg_nos = [];
 
 while (($row = fgetcsv($handle)) !== false) {
     $row_num++;
@@ -122,6 +123,13 @@ while (($row = fgetcsv($handle)) !== false) {
     $course_study = $data['course_study'];
     $state_origin = $data['state_origin'];
     $lga          = $data['lga'];
+
+    // Prevent duplicate reg_no rows in the uploaded CSV file
+    if (isset($seen_reg_nos[$reg_no])) {
+        $skipped++;
+        continue;
+    }
+    $seen_reg_nos[$reg_no] = true;
 
     // Validate email if provided
     if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {

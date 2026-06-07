@@ -123,7 +123,7 @@
 }
 
 /* ── File selected indicator ──────────────────────────────────────────── */
-.file-info {
+..file-info {
     display: none;
     align-items: center;
     gap: 10px;
@@ -133,6 +133,8 @@
     border-radius: 6px;
     font-size: 14px;
     color: var(--green-text-color);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .file-info.is-visible { display: flex; }
@@ -146,7 +148,8 @@
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
     font-weight: 600;
 }
 
@@ -192,7 +195,7 @@
 
 .csv-preview-table {
     width: 100%;
-    min-width: 640px;
+    min-width: 100%;
     border-collapse: collapse;
     font-size: 12px;
     background-color: #fff;
@@ -203,7 +206,8 @@
     padding: 8px 10px;
     border-bottom: 1px solid var(--border-color);
     text-align: left;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .csv-preview-table th {
@@ -332,12 +336,56 @@
     text-align: right;
 }
 
+.delete-student-form {
+    margin: 0;
+}
+
+.delete-record-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 32px;
+    padding: 6px 10px;
+    color: #8a1f1f;
+    background-color: #fff4f4;
+    border: 1px solid #efc2c2;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.delete-record-btn ion-icon {
+    font-size: 15px;
+}
+
+.delete-record-btn:hover,
+.delete-record-btn:focus {
+    color: #fff;
+    background-color: #c0392b;
+    border-color: #c0392b;
+    outline: none;
+}
+
 /* No-results row inside the table */
 .no-results-row td {
     padding: 24px;
     text-align: center;
     color: var(--muted-text-color);
     font-style: italic;
+}
+
+.student-records-section .table-wrap .staff-table {
+    min-width: 0;
+}
+
+.student-records-section .staff-table th,
+.student-records-section .staff-table td {
+    white-space: normal;
+    word-break: break-word;
 }
 
 @media (max-width: 768px) {

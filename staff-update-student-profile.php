@@ -281,22 +281,43 @@
                 <th>S/No.</th>
                 <th>Student Name</th>
                 <th>Reg No</th>
-                <th>Programme</th>
                 <th>Department</th>
-                <th>Phone</th>
-                <th>Email</th>
+                <th>Programme</th>
+                <th>Level</th>
+                <th>Course of Study</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody id="studentTableBody">
               <?php foreach ($students as $i => $s): ?>
-              <tr class="student-row">
+              <?php
+                $student_name = $s['student_name'] ?? '';
+                $reg_no = $s['reg_no'] ?? '';
+                $department = $s['department'] ?? '';
+                $programme = $s['programme'] ?? '';
+                $level = $s['level'] ?? '';
+                $course_study = $s['course_study'] ?? '';
+              ?>
+              <tr class="student-row"
+                  data-search="<?php echo htmlspecialchars(strtolower($student_name . ' ' . $reg_no . ' ' . $department . ' ' . $programme . ' ' . $level . ' ' . $course_study), ENT_QUOTES, 'UTF-8'); ?>"
+                  data-programme="<?php echo htmlspecialchars($programme, ENT_QUOTES, 'UTF-8'); ?>">
                 <td><?php echo $i + 1; ?></td>
-                <td><?php echo htmlspecialchars($s['student_name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($s['reg_no'],       ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($s['programme'],    ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($s['department'],   ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($s['phone_no']  ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($s['email']     ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($student_name, ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($reg_no,       ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($department,   ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($programme,    ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($level,        ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($course_study, ENT_QUOTES, 'UTF-8'); ?></td>
+                <td>
+                  <form class="delete-student-form" action="staff-delete-student-profile-process.php" method="post" data-student-name="<?php echo htmlspecialchars($student_name, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="student_profile_id" value="<?php echo (int) $s['student_profile_id']; ?>">
+                    <input type="hidden" name="reg_no" value="<?php echo htmlspecialchars($reg_no, ENT_QUOTES, 'UTF-8'); ?>">
+                    <button class="delete-record-btn" type="submit" title="Delete student record">
+                      <ion-icon name="trash-outline"></ion-icon>
+                      Delete
+                    </button>
+                  </form>
+                </td>
               </tr>
               <?php endforeach; ?>
             </tbody>
