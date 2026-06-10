@@ -7,17 +7,26 @@
   $student_name = htmlspecialchars($_SESSION['student_name'], ENT_QUOTES, 'UTF-8');
   $reg_no = htmlspecialchars($_SESSION['reg_no'], ENT_QUOTES, 'UTF-8');
   $transcript_status = null;
+  $all_statuses = [];
 
-  $stmt = $conn->prepare("SELECT progress_status FROM process_status WHERE reg_no = ? ORDER BY process_status_id DESC LIMIT 1");
-  $stmt->bind_param("s", $_SESSION['reg_no']);
-  $stmt->execute();
-  $result = $stmt->get_result();
-
-  if ($result->num_rows > 0) {
-    $transcript_status = $result->fetch_assoc();
+  // Fetch all process_status rows for this student (most recent first)
+  if ($stmt = $conn->prepare("SELECT p.process_status_id, p.recipient_id, p.reg_no, p.progress_status, p.progress_note, COALESCE(r.recipient_name,'-') AS recipient_name, COALESCE(r.institution_name,'-') AS institution_name FROM process_status p LEFT JOIN recipient r ON p.recipient_id = r.recipient_id WHERE p.reg_no = ? ORDER BY p.process_status_id DESC")) {
+    $stmt->bind_param("s", $_SESSION['reg_no']);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($res) {
+      while ($r = $res->fetch_assoc()) {
+        $all_statuses[] = $r;
+      }
+    }
+    $stmt->close();
   }
 
-  $stmt->close();
+  // Use the latest status (first row) for the summary card
+  if (!empty($all_statuses)) {
+    $transcript_status = $all_statuses[0];
+  }
+
   $conn->close();
 
   function transcript_status_feedback($status) {
@@ -54,15 +63,27 @@
   $status_feedback = transcript_status_feedback($status_text);
   $status_display = htmlspecialchars($status_text ?? 'Not processed', ENT_QUOTES, 'UTF-8');
 
+  function request_status_class($status) {
+    $s = strtolower(trim((string)($status ?? '')));
+    if ($s === '' ) return 'status-empty';
+    if (strpos($s,'processed') !== false || strpos($s,'completed') !== false || strpos($s,'approved') !== false || strpos($s,'released') !== false) return 'status-processed';
+    return 'status-pending';
+  }
+
+  // Prepare completed requests for card view
+  $completed_requests = array_filter($all_statuses, function($r){
+    $s = strtolower((string)($r['progress_status'] ?? ''));
+    return $s === 'completed' || strpos($s, 'completed') !== false || $s === 'approved' || strpos($s,'released') !== false || strpos($s,'processed') !== false;
+  });
+
   ?>
   <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Dashboard: Transcript Status</title>
   <link rel="stylesheet" href="./assets/css/student-dashboard.css" />
   <link rel="stylesheet" href="./assets/css/transcript-status.css" />
+  <!-- Inline styles removed; styles now live in assets/css/transcript-status.css -->
+  <title>Student Dashboard: Transcript Status</title>
 </head>
 <body>
     <header class="dashboard-header">
@@ -110,6 +131,42 @@
             </dl>
           </div>
         </div>
+        
+        <?php if (!empty($completed_requests)): ?>
+          <h3>Completed Requests</h3>
+          <div class="completed-requests">
+            <?php foreach ($completed_requests as $cr): ?>
+              <article class="request-card <?php echo request_status_class($cr['progress_status']); ?>" data-request-id="<?php echo (int)$cr['process_status_id']; ?>">
+                <div class="recipient-card">
+                  <div class="recipient-card-header">
+                    <h4>Recipient Information</h4>
+                  </div>
+                  <dl class="recipient-details">
+                    <div>
+                      <dt>Name</dt>
+                      <dd><?php echo htmlspecialchars($cr['recipient_name'] ?? '-', ENT_QUOTES, 'UTF-8'); ?></dd>
+                    </div>
+                    <div>
+                      <dt>Institution</dt>
+                      <dd><?php echo htmlspecialchars($cr['institution_name'] ?? '-', ENT_QUOTES, 'UTF-8'); ?></dd>
+                    </div>
+                  </dl>
+                </div>
+                <div class="card-head">
+                  <h4>Completed Request <small class="small">— <?php echo htmlspecialchars(ucfirst($cr['progress_status'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></small></h4>
+                  <div class="card-actions">
+                    <a class="btn btn-outline" href="print-slip.php?request_id=<?php echo (int)$cr['process_status_id']; ?>&recipient_id=<?php echo (int)($cr['recipient_id'] ?? 0); ?>&reg_no=<?php echo urlencode($cr['reg_no'] ?? ''); ?>" aria-label="View slip for request <?php echo (int)$cr['process_status_id']; ?>">View Slip</a>
+                    <a class="btn" href="print-slip.php?request_id=<?php echo (int)$cr['process_status_id']; ?>&recipient_id=<?php echo (int)($cr['recipient_id'] ?? 0); ?>&reg_no=<?php echo urlencode($cr['reg_no'] ?? ''); ?>" aria-label="Download PDF for request <?php echo (int)$cr['process_status_id']; ?>">Download PDF</a>
+                  </div>
+                </div>
+                <div class="meta small">Reg No: <code><?php echo htmlspecialchars($cr['reg_no'] ?? '-', ENT_QUOTES, 'UTF-8'); ?></code></div>
+                <div class="note"><?php echo nl2br(htmlspecialchars($cr['progress_note'] ?? 'No note provided', ENT_QUOTES, 'UTF-8')); ?></div>
+              </article>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
+
+        <!-- All requests table removed per user request -->
       
       </section>
     </main>
@@ -119,6 +176,9 @@
       <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
       <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
       <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-google"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
     </p>
   </footer>
 

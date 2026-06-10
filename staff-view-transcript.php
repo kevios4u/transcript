@@ -1,7 +1,34 @@
 <?php
   include 'auth-staff.php';
+  include 'dbConnect.php';
 
   $staff_name = htmlspecialchars($_SESSION['staff_name'] ?? $_SESSION['username'] ?? 'Staff', ENT_QUOTES, 'UTF-8');
+
+  $success_message = '';
+  $error_message = '';
+
+  // Handle release/archive actions
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    $recipient_id = intval($_POST['recipient_id'] ?? 0);
+    $reg_no = trim($_POST['reg_no'] ?? '');
+    if ($action === 'release' || $action === 'archive') {
+      $status = $action === 'release' ? 'released' : 'archived';
+      $note = $conn->real_escape_string(($action === 'release' ? 'Marked released' : 'Archived by staff'));
+      $reg_safe = $conn->real_escape_string($reg_no);
+      if ($recipient_id > 0) {
+        $rid = $conn->real_escape_string((string) $recipient_id);
+        $conn->query("INSERT INTO process_status (recipient_id, reg_no, progress_status, progress_note) VALUES ('$rid', '$reg_safe', '$status', '$note')");
+      } else {
+        $conn->query("INSERT INTO process_status (recipient_id, reg_no, progress_status, progress_note) VALUES (NULL, '$reg_safe', '$status', '$note')");
+      }
+      if ($conn->error) {
+        $error_message = 'Database error: ' . $conn->error;
+      } else {
+        $success_message = ucfirst($status) . ' successfully.';
+      }
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,51 +71,61 @@
 
       <article class="staff-panel">
         <form class="staff-form" action="#" method="get">
-          <div class="filter-row">
-            <div class="form-group">
-              <label for="search">Search</label>
-              <input type="search" id="search" name="search" placeholder="Reg no, name, or transcript ID">
-            </div>
-            <div class="form-group">
-              <label for="from_date">From</label>
-              <input type="date" id="from_date" name="from_date">
-            </div>
-            <div class="form-group">
-              <label for="to_date">To</label>
-              <input type="date" id="to_date" name="to_date">
-            </div>
-            <button class="staff-button" type="submit">
-              <ion-icon name="search-outline"></ion-icon>
-              Filter
-            </button>
+          <div class="table-wrap">
+            <?php
+              // show toast if messages
+              if (!empty($success_message) || !empty($error_message)) {
+                echo '<div id="processToast" class="notification-toast ' . (!empty($error_message) ? 'error' : 'success') . '"><p>' . ($error_message ?: $success_message) . '</p><button type="button" class="notification-close" onclick="document.getElementById(\'processToast\')?.remove();">&times;</button></div>';
+              }
+
+              // Fetch latest process_status entries where status indicates completion or release
+              $completed = [];
+            if (isset($conn)) {
+              $statuses = "'approved','completed','released','archived'";
+              $sql = "SELECT p.process_status_id, p.recipient_id, p.reg_no, p.progress_status, p.progress_note, COALESCE(s.student_name, 'Unknown') AS student_name FROM process_status p LEFT JOIN recipient r ON p.recipient_id = r.recipient_id LEFT JOIN student_profile s ON COALESCE(r.reg_no, p.reg_no) = s.reg_no WHERE p.process_status_id = (SELECT MAX(p2.process_status_id) FROM process_status p2 WHERE (p2.recipient_id = p.recipient_id OR (p2.recipient_id IS NULL AND p2.reg_no = p.reg_no))) AND p.progress_status IN ($statuses) ORDER BY p.process_status_id DESC";
+              $res = $conn->query($sql);
+              if ($res) {
+                while ($row = $res->fetch_assoc()) $completed[] = $row;
+              }
+            }
+            ?>
+
+            <table class="staff-table">
+              <thead>
+                <tr>
+                  <th class="id-column">Transcript ID</th>
+                  <th>Student</th>
+                  <th>Reg No</th>
+                  <th>Note</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (empty($completed)): ?>
+                  <tr>
+                    <td colspan="5">
+                      <div class="empty-state">
+                        <ion-icon name="document-attach-outline"></ion-icon>
+                        <h3>No Processed Transcripts</h3>
+                        <p>Completed transcript records will appear here after processing is connected.</p>
+                      </div>
+                    </td>
+                  </tr>
+                <?php else: ?>
+                  <?php foreach ($completed as $row): ?>
+                    <tr>
+                      <td class="id-column"><?php echo (int) $row['process_status_id']; ?></td>
+                      <td><?php echo htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                      <td><?php echo htmlspecialchars($row['reg_no'], ENT_QUOTES, 'UTF-8'); ?></td>
+                      <td class="note-column"><?php echo htmlspecialchars($row['progress_note'] ?? '-', ENT_QUOTES, 'UTF-8'); ?></td>
+                      <td><?php echo htmlspecialchars(ucfirst($row['progress_status']), ENT_QUOTES, 'UTF-8'); ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              </tbody>
+            </table>
           </div>
         </form>
-
-        <div class="table-wrap">
-          <table class="staff-table">
-            <thead>
-              <tr>
-                <th>Transcript ID</th>
-                <th>Student</th>
-                <th>Reg No</th>
-                <th>Completed Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="6">
-                  <div class="empty-state">
-                    <ion-icon name="document-attach-outline"></ion-icon>
-                    <h3>No Processed Transcripts</h3>
-                    <p>Completed transcript records will appear here after processing is connected.</p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </article>
     </section>
   </main>
@@ -99,6 +136,9 @@
       <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
       <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
       <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-google"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
     </p>
   </footer>
 

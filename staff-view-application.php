@@ -14,11 +14,7 @@
 
   if ($status !== '') {
     $statusEscaped = $conn->real_escape_string($status);
-    if ($statusEscaped === 'submitted') {
-      $whereClauses[] = "(p.progress_status IS NULL OR p.progress_status = '' OR p.progress_status = 'submitted')";
-    } else {
-      $whereClauses[] = "p.progress_status = '$statusEscaped'";
-    }
+    $whereClauses[] = "COALESCE((SELECT progress_status FROM process_status WHERE recipient_id = r.recipient_id ORDER BY process_status_id DESC LIMIT 1), (SELECT progress_status FROM process_status WHERE reg_no = r.reg_no AND recipient_id IS NULL ORDER BY process_status_id DESC LIMIT 1), 'submitted') = '$statusEscaped'";
   }
 
   $whereSql = '';
@@ -26,13 +22,21 @@
     $whereSql = 'WHERE ' . implode(' AND ', $whereClauses);
   }
 
-  $query = "SELECT r.recipient_id, r.reg_no, COALESCE(s.student_name, 'Unknown') AS student_name, COALESCE(s.course_study, '-') AS course_study, COALESCE(r.institution_name, '-') AS institution_name, COALESCE((SELECT progress_status FROM process_status WHERE recipient_id = r.recipient_id ORDER BY process_status_id DESC LIMIT 1), (SELECT progress_status FROM process_status WHERE reg_no = r.reg_no ORDER BY process_status_id DESC LIMIT 1), 'submitted') AS progress_status FROM recipient r LEFT JOIN student_profile s ON r.reg_no = s.reg_no $whereSql ORDER BY r.recipient_id DESC";
+  $query = "SELECT r.recipient_id, r.reg_no, COALESCE(s.student_name, 'Unknown') AS student_name, COALESCE(s.course_study, '-') AS course_study, COALESCE(r.institution_name, '-') AS institution_name, COALESCE((SELECT progress_status FROM process_status WHERE recipient_id = r.recipient_id ORDER BY process_status_id DESC LIMIT 1), (SELECT progress_status FROM process_status WHERE reg_no = r.reg_no AND recipient_id IS NULL ORDER BY process_status_id DESC LIMIT 1), 'submitted') AS progress_status FROM recipient r LEFT JOIN student_profile s ON r.reg_no = s.reg_no $whereSql ORDER BY r.recipient_id DESC";
   $result = $conn->query($query);
   $applications = [];
   if ($result) {
     while ($row = $result->fetch_assoc()) {
       $applications[] = $row;
     }
+  }
+  $success_message = '';
+  $error_message = '';
+  if (isset($_GET['success'])) {
+    $success_message = 'Application updated successfully.';
+  }
+  if (isset($_GET['error'])) {
+    $error_message = htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8');
   }
 ?>
 <!DOCTYPE html>
@@ -86,8 +90,10 @@
               <select id="status" name="status">
                 <option value=""<?php echo $status === '' ? ' selected' : ''; ?>>All statuses</option>
                 <option value="submitted"<?php echo $status === 'submitted' ? ' selected' : ''; ?>>Submitted</option>
-                <option value="reviewed"<?php echo $status === 'reviewed' ? ' selected' : ''; ?>>Reviewed</option>
+                <option value="verified"<?php echo $status === 'verified' ? ' selected' : ''; ?>>Verified</option>
                 <option value="processing"<?php echo $status === 'processing' ? ' selected' : ''; ?>>Processing</option>
+                <option value="approved"<?php echo $status === 'approved' ? ' selected' : ''; ?>>Approved</option>
+                <option value="completed"<?php echo $status === 'completed' ? ' selected' : ''; ?>>Completed</option>
               </select>
             </div>
             <button class="staff-button" type="submit">
@@ -106,13 +112,13 @@
                 <th>Reg No</th>
                 <th>Course of Study</th>
                 <th>Recipient Institution</th>
-                <th>Action</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               <?php if (empty($applications)): ?>
                 <tr>
-                  <td colspan="6">
+                  <td colspan="7">
                     <div class="empty-state">
                       <ion-icon name="folder-open-outline"></ion-icon>
                       <h3>No Applications Loaded</h3>
@@ -134,12 +140,7 @@
                     <td><?php echo htmlspecialchars($application['institution_name'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td>
                       <?php if ($canProcess): ?>
-                        <form action="staff-view-application-process.php" method="post">
-                          <input type="hidden" name="recipient_id" value="<?php echo (int) $application['recipient_id']; ?>">
-                          <input type="hidden" name="reg_no" value="<?php echo htmlspecialchars($application['reg_no'], ENT_QUOTES, 'UTF-8'); ?>">
-                          <input type="hidden" name="next_status" value="processing">
-                          <button class="staff-button" type="submit">Process</button>
-                        </form>
+                        <a class="staff-button" href="staff-process-transcript.php?recipient_id=<?php echo (int) $application['recipient_id']; ?>&reg_no=<?php echo urlencode($application['reg_no']); ?>">Processing</a>
                       <?php else: ?>
                         <span class="status-label"><?php echo ucfirst($progressStatus); ?></span>
                       <?php endif; ?>
@@ -162,12 +163,13 @@
       <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
       <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
       <a href="#"><ion-icon name="logo-google"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
     </p>
   </footer>
 
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script src="./assets/js/staff-dashboard.js"></script>
-  <script src="./staff-view-application.js"></script>
+  <script src="./assets/js/process-toast.js"></script>
 </body>
 </html>

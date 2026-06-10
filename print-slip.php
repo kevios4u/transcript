@@ -19,16 +19,31 @@
           }
           $stmt->close();
 
-          // Fetch latest process status
+          // Load the requested transcript slip record if set, otherwise fall back to latest status
+          $request_id = isset($_GET['request_id']) ? intval($_GET['request_id']) : null;
           $status = null;
-          $stmt2 = $conn->prepare("SELECT progress_status FROM process_status WHERE reg_no = ? LIMIT 1");
-          $stmt2->bind_param("s", $_SESSION['reg_no']);
-          $stmt2->execute();
-          $res2 = $stmt2->get_result();
-          if ($res2 && $res2->num_rows > 0) {
-            $status = $res2->fetch_assoc();
+          if ($request_id) {
+            $stmt2 = $conn->prepare("SELECT p.progress_status, p.progress_note, p.recipient_id, COALESCE(r.institution_name, '-') AS institution_name, COALESCE(r.recipient_name, '-') AS recipient_name, p.process_status_id FROM process_status p LEFT JOIN recipient r ON p.recipient_id = r.recipient_id WHERE p.process_status_id = ? AND p.reg_no = ? LIMIT 1");
+            $stmt2->bind_param("is", $request_id, $_SESSION['reg_no']);
+            $stmt2->execute();
+            $res2 = $stmt2->get_result();
+
+            if ($res2 && $res2->num_rows > 0) {
+              $status = $res2->fetch_assoc();
+            }
+            $stmt2->close();
           }
-          $stmt2->close();
+
+          if (!$status) {
+            $stmt2 = $conn->prepare("SELECT p.progress_status, p.progress_note, p.recipient_id, COALESCE(r.institution_name, '-') AS institution_name, COALESCE(r.recipient_name, '-') AS recipient_name, p.process_status_id FROM process_status p LEFT JOIN recipient r ON p.recipient_id = r.recipient_id WHERE p.reg_no = ? ORDER BY p.process_status_id DESC LIMIT 1");
+            $stmt2->bind_param("s", $_SESSION['reg_no']);
+            $stmt2->execute();
+            $res2 = $stmt2->get_result();
+            if ($res2 && $res2->num_rows > 0) {
+              $status = $res2->fetch_assoc();
+            }
+            $stmt2->close();
+          }
           $conn->close();
 
           function esc($v) { return htmlspecialchars($v ?? '', ENT_QUOTES, 'UTF-8'); }
@@ -92,10 +107,6 @@
               <dd><?php echo esc($profile['reg_no'] ?? $reg_no); ?></dd>
             </div>
             <div>
-              <dt>Department</dt>
-              <dd><?php echo esc($profile['department'] ?? ''); ?></dd>
-            </div>
-            <div>
               <dt>Course of Study</dt>
               <dd><?php echo esc($profile['course_study'] ?? ''); ?></dd>
             </div>
@@ -112,8 +123,12 @@
               <dd><?php echo esc($status['progress_status'] ?? 'Not processed'); ?></dd>
             </div>
             <div>
-              <dt>Last Updated</dt>
-              <dd><?php echo esc($status['updated_at'] ?? ''); ?></dd>
+              <dt>Recipient Name</dt>
+              <dd><?php echo esc($status['recipient_name'] ?? '-'); ?></dd>
+            </div>
+            <div>
+              <dt>Recipient Institution</dt>
+              <dd><?php echo esc($status['institution_name'] ?? '-'); ?></dd>
             </div>
           </dl>
         </div>
@@ -126,6 +141,9 @@
       <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
       <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
       <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-google"></ion-icon></a>
+      <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
     </p>
   </footer>
 
